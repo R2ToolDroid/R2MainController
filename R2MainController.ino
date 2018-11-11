@@ -1,4 +1,4 @@
-// #include <SoftwareSerial.h>        // Durch diesen Include können wir die Funktionen
+//    #include <SoftwareSerial.h>        // Durch diesen Include können wir die Funktionen
 // der SoftwareSerial Bibliothek nutzen.
 //SoftwareSerial FromWifi(10,11);     //  Pin D10 ist RX, Pin D11 ist TX.// Senden an Marcduino Boards
 //SoftwareSerial comDuino(8,9);       //  Pin D8 ist RX, Pin D9 ist TX.// Senden an Marcduino Boards
@@ -39,7 +39,6 @@ void setup()
 
   // Dann initialisieren wir die serielle Schnittstelle der SoftwareSerial Bibliothek.
   //FromWifi.begin(9600);
-
   //delay(500);
   //comDuino.begin(9600);
 
@@ -140,6 +139,6 @@ void checkdebug() {
     Serial.print( cmd + " OK debug off" + "\n" ); //Kommando quittieren
     debug = 0;
   }
-  return;
+  
 }
 
