@@ -4,6 +4,9 @@ Communication via UART Serial
 
 Control your Droid from differend Systems.
 
+I use a Arduino MEGA 2560
+
+
 ---Input---
 
 1. R2Touch App
