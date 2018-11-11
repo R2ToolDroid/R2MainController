@@ -9,12 +9,13 @@ Control your Droid from differend Systems.
 1. R2Touch App
 2. RCInputController
 3. CoinButton
+4. couple of automatic sensors
+
 
 ---Output---
 
 1. DomeController
 2. Marcduino Boards
 3. BodyGadgetController
-4. couple of automatic sensors
 
 
