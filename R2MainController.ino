@@ -1,4 +1,4 @@
-//    #include <SoftwareSerial.h>        // Durch diesen Include können wir die Funktionen
+// #include <SoftwareSerial.h>        // Durch diesen Include können wir die Funktionen
 // der SoftwareSerial Bibliothek nutzen.
 //SoftwareSerial FromWifi(10,11);     //  Pin D10 ist RX, Pin D11 ist TX.// Senden an Marcduino Boards
 //SoftwareSerial comDuino(8,9);       //  Pin D8 ist RX, Pin D9 ist TX.// Senden an Marcduino Boards
@@ -47,7 +47,7 @@ void setup()
 void loop()
 {
 
-  //FromWifi.listen();
+  ///// INPUT WIFI MODUL
   while (Serial3.available() > 0 || Serial.available() > 0 ) {      // So lange etwas empfangen wird, durchlaufe die Schleife.
 
     checkdebug(); ///debuging prüfen
@@ -63,14 +63,14 @@ void loop()
         Serial.print('\n');
       }
 
-      Serial3.print(W_input);           // hier geht es weiter zum Marcduino Dome Controller
-      Serial3.print('\r');
-      // und schicke noch ein NL (NewLine) für einen Zeilenumbruch hinterher.
+      Serial2.print(W_input);           // hier geht es weiter zum Marcduino Dome Controller
+      Serial2.print('\r');// und schicke noch ein NL (NewLine) für einen Zeilenumbruch hinterher.
       W_input = "";                         // Lösche den String für die nächste Nachricht.
 
     } /// CR abgewartet
-  }  //end While
+  }  //end While WIFI MODUL
 
+  //// INPUT VOM COINBUTTON MODUL
   while (Serial1.available() > 0 || Serial.available() > 0 ) {      // So lange etwas empfangen wird, durchlaufe die Schleife.
 
     checkdebug(); ///debuging prüfen
@@ -86,16 +86,16 @@ void loop()
         Serial.print('\n');
       }
 
-      Serial3.print(CB_input);           // hier geht es weiter zum Marcduino Dome Controller
-      Serial3.print('\r');
+      Serial2.print(CB_input);           // hier geht es weiter zum Marcduino Dome Controller
+      Serial2.print('\r');
       // und schicke noch ein NL (NewLine) für einen Zeilenumbruch hinterher.
       CB_input = "";                         // Lösche den String für die nächste Nachricht.
 
     } /// CR abgewartet
 
-  } ///ende WHile for CB
+  } ///ende WHile for COINBUTTON MODUL
 
-
+  //// INPUT VOM RC MODUL
   while (Serial2.available() > 0 || Serial.available() > 0 ) {      // So lange etwas empfangen wird, durchlaufe die Schleife.
 
     checkdebug(); ///debuging prüfen
@@ -111,14 +111,14 @@ void loop()
         Serial.print('\n');
       }
 
-      Serial3.print(RC_input);           // hier geht es weiter zum Marcduino Dome Controller
-      Serial3.print('\r');
+      Serial2.print(RC_input);           // hier geht es weiter zum Marcduino Dome Controller
+      Serial2.print('\r');
       // und schicke noch ein NL (NewLine) für einen Zeilenumbruch hinterher.
       RC_input = "";                         // Lösche den String für die nächste Nachricht.
 
     } /// CR abgewartet
 
-  } ///ende WHile for CB
+  } ///ende WHile for RC Modul
 
 }
 
@@ -141,4 +141,3 @@ void checkdebug() {
   }
   
 }
-
