@@ -7,6 +7,17 @@ String data; //Serial Data
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
+///Relais Bridge for MOVE/Drive
+///Set Pins as Output
+
+const int REL1 =  42;  
+const int REL2 =  43;  
+const int REL3 =  44;  
+const int REL4 =  45;  
+
+
+
+
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 
 #define MIN_PULSE_WIDTH       500
@@ -37,7 +48,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 
 //Klappen Servos und Position
 //Nummer  0   1  2  3  4  5
-int KlappeAuf[] = {0,60,20,90,60,170};
+int KlappeAuf[] = {0,60,20,90,20,170}; //vorher 60 P4
 //Nummer  0   1  2   3   4  5
 int KlappeZu[] = {0,170,180,190,190,50};
 
@@ -303,6 +314,21 @@ int Faint() {
    
 }
 
+void DrivePower(int on){
+  
+   if (on == 1) {
+   digitalWrite(REL1, HIGH);
+   digitalWrite(REL2, HIGH);
+   digitalWrite(REL3, HIGH);
+   digitalWrite(REL4, HIGH);
+   } else  {
+   digitalWrite(REL1, LOW);
+   digitalWrite(REL2, LOW);
+   digitalWrite(REL3, LOW);
+   digitalWrite(REL4, LOW);
+   }
+  
+}
 
 
 
@@ -339,11 +365,19 @@ void setup()
   Serial1.begin(9600); // Serial RX Input vom Coinslot Modul TX to Coinslot Modul
   Serial2.begin(9600); // Serial TX ____ to Dome Drive Controller
   Serial3.begin(9600); // Serial RX Input vom Wifi Modul TX to Marcduino Boards
+  ///Output Pin for Relais Move/Drive
+  pinMode(REL1, OUTPUT);
+  pinMode(REL2, OUTPUT);
+  pinMode(REL3, OUTPUT);
+  pinMode(REL4, OUTPUT);
+  DrivePower(1);
   Serial.println("16 channel Servo test!");
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY); 
-  debug = true;
+  debug = false;
   Sysreset();  
+  
+  
 }
 
 /* ##### MAIN KERNEL SECTION #####*/
@@ -354,6 +388,7 @@ void loop()
    readWifi();
    readCoinButton();
    readCom();  
+    
    
 }
 
@@ -426,6 +461,8 @@ void parseCommand(String cmd) {
     Serial2.print("mode1");           // hier geht es weiter zum Marcduino Dome Controller
     Serial2.print('\r');
     delay(500);
+    
+    
     Serial3.print(":SE13");           // hier geht es weiter zum Marcduino Dome Controller
     Serial3.print('\r');
     Sysreset();
@@ -450,7 +487,7 @@ void parseCommand(String cmd) {
         Serial.println("######Comando Dome CBD3 ######");
         Serial.println(cmd);
       }
-      Serial2.print("nono");           // hier geht es weiter zum  Dome Controller
+      Serial2.print("center");           // hier geht es weiter zum Marcduino Dome Controller
       Serial2.print('\r');
       delay(500);
       Serial3.print("$214");           // hier geht es weiter zum Marcduino Dome Controller
@@ -468,7 +505,7 @@ void parseCommand(String cmd) {
       }
       Serial2.print("usb");           // hier geht es weiter zum  Dome Controller
       Serial2.print('\r');
-      delay(4000);
+      delay(1000);
       Serial3.print(":OP02");           // hier geht es weiter zum Marcduino Dome Controller
       Serial3.print('\r');
       delay(500);
@@ -503,7 +540,7 @@ void parseCommand(String cmd) {
       
       Serial2.print("tool1");
       Serial2.print("\r");
-      delay(4000); 
+      delay(2000); 
       Serial3.print(":OP04");
       Serial3.print("\r");
       delay(100);
@@ -523,7 +560,7 @@ void parseCommand(String cmd) {
       
       Serial2.print("tool2");
       Serial2.print("\r");
-      delay(4000);
+      delay(2000);
       Serial3.print("$26");
       Serial3.print("\r");
       delay(500);
@@ -544,7 +581,7 @@ void parseCommand(String cmd) {
 
       Serial2.print("tool3");
       Serial2.print("\r");
-      delay(5000);
+      delay(2500);
       Serial3.print(":OP06");
       Serial3.print("\r");
 
@@ -656,6 +693,7 @@ void parseCommand(String cmd) {
           
       Serial3.print("$26");
       Serial3.print("\r");
+      DrivePower(1);
       
     }
 
@@ -667,6 +705,7 @@ void parseCommand(String cmd) {
           
       Serial3.print("$26");
       Serial3.print("\r");
+      DrivePower(0);
       
     }
 
