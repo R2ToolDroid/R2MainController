@@ -4,6 +4,12 @@ String cmd; //Consolen Input
 byte debug; //Debug function
 String data; //Serial Data
 
+
+int Mode = 0; // Default Mode  0 = Input Wifi and Coin
+              // RC Mode       1 = Input RC and Coin
+              // RC Show       2 = RC only
+
+
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
@@ -15,6 +21,25 @@ const int REL2 =  43;
 const int REL3 =  44;  
 const int REL4 =  45;  
 
+///Input Channels for RC Controller
+
+////Taster
+
+int CH11 = 8;  ///Level
+int CH12 = 9;  ///Execute
+int CH13 = 10;
+int CH14 = 11;
+
+///Schalter Statisch
+int CH5  = 4;
+int CH6  = 5;
+int CH9  = 6;
+int CH10 = 7;
+
+/// Hebel/Poti
+int CH4 = 22; ///ARM Panel 1
+int CH8 = 23;
+int CH7 = 24;
 
 
 
@@ -57,6 +82,10 @@ int SchubaAuf[] = {0, 80, 80, 80, 80};
 //SCHUBA 0 1 2 3 4
 int SchubaZu[] = {0, 190, 190, 190, 190};
 
+
+int GripAuf = 90;
+int GripZu = 62;
+
 int ServosAus() {
       //Alle Klappenservos aus
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {
@@ -71,15 +100,18 @@ int ServosAus() {
       pwm.setPWM(7, 0, 4096); ///Servo Abschalten
   
 }
+
  
 
 int Sysreset(){
-
-       pwm.setPWM(1, 0, pulseWidth(120));///Gripper ZU
-       delay(500);
+       
+      
+       
        pwm.setPWM(0, 0, pulseWidth(30));///Arm 1 zurück
        delay(200);
-       pwm.setPWM(1, 0, pulseWidth(85));///Gripper ZU
+        pwm.setPWM(1, 0, pulseWidth(GripAuf));///Gripper Auf
+       delay(1000);
+       pwm.setPWM(1, 0, pulseWidth(GripZu));///Gripper ZU
        delay(200);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(200);
@@ -114,7 +146,7 @@ int CloseAll() {
   
       pwm.setPWM(0, 0, pulseWidth(30));///Arm 1 zurück
        delay(200);
-       pwm.setPWM(1, 0, pulseWidth(85));///Gripper ZU
+       pwm.setPWM(1, 0, pulseWidth(GripZu));///Gripper ZU
        delay(200);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(200);
@@ -171,7 +203,7 @@ int Smirk() {
        //Function Arm reset evtl auslagern 
        pwm.setPWM(0, 0, pulseWidth(30));///Arm 1 zurück
        delay(50);
-       pwm.setPWM(1, 0, pulseWidth(85));///Gripper ZU
+       pwm.setPWM(1, 0, pulseWidth(GripZu));///Gripper ZU
        delay(50);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(50);
@@ -216,7 +248,7 @@ int Wave() {
        //Function Arm reset evtl auslagern 
        pwm.setPWM(0, 0, pulseWidth(30));///Arm 1 zurück
        delay(50);
-       pwm.setPWM(1, 0, pulseWidth(85));///Gripper ZU
+       pwm.setPWM(1, 0, pulseWidth(GripZu));///Gripper ZU
        delay(50);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(50);
@@ -267,7 +299,7 @@ int Dance() {
       //Function Arm reset evtl auslagern 
        pwm.setPWM(0, 0, pulseWidth(30));///Arm 1 zurück
        delay(50);
-       pwm.setPWM(1, 0, pulseWidth(85));///Gripper ZU
+       pwm.setPWM(1, 0, pulseWidth(GripZu));///Gripper ZU
        delay(50);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(50);
@@ -343,6 +375,99 @@ int pulseWidth(int angle)
 }
 
 
+void RcInput() {
+
+    int CH11value = pulseIn(CH11,HIGH);
+    int CH12value = pulseIn(CH12,HIGH);
+    int CH5value = pulseIn(CH5,HIGH);
+    int CH6value = pulseIn(CH6,HIGH);
+
+
+
+   
+      if (CH11value >=800){ ///Check if Sensor is Connected and RC on
+      ////Sensor Channel auslesen und Action    
+          if (CH11value < 1400){
+              if (debug){ 
+                  Serial.println("LEVEL plus");
+              }
+
+            Serial1.print("1");
+            Serial1.print("\r");
+    
+          } else if (CH11value > 1500) {
+                if (debug) {
+                    Serial.println("LEVEL minus");
+                    }     
+             Serial1.print("3");
+             Serial1.print("\r");       
+   
+          } // END CH11
+          
+
+       
+          if (CH12value < 1400){
+              if (debug){ 
+                  Serial.println("LEVEL plus");
+              }
+              
+              Serial1.print("2");
+              Serial1.print("\r");
+    
+          } else if (CH12value > 1500) {
+                if (debug) {
+                    Serial.println("LEVEL minus");
+                    }     
+                    
+                Wave();    
+               
+          } // END CH12   
+
+          ////CH5          
+          if (CH5value < 1400){
+              if (debug){ 
+                  Serial.println("CH5");
+              }
+              
+              DrivePower(0);
+    
+          } else if (CH5value > 1500) {
+                if (debug) {
+                    Serial.println("CH5");
+                    }     
+                    
+              DrivePower(1); 
+               
+          } // END CH5
+
+          //CH6
+          
+          if (CH6value < 1400){
+              if (debug){ 
+                  Serial.println("CH5");
+              }
+
+              Serial3.print(":SE07");
+              Serial3.print("\r");
+    
+          } else if (CH6value > 1500) {
+                if (debug) {
+                    Serial.println("CH5");
+                    }     
+                    
+              Serial3.print(":SE10");
+              Serial3.print("\r");
+              Sysreset();
+               
+          } // END CH6
+
+          
+
+      } //END check RC connected
+      
+} //END Sensor RC Input
+
+
 
 void setup()
 {
@@ -374,7 +499,7 @@ void setup()
   Serial.println("16 channel Servo test!");
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY); 
-  debug = false;
+  debug = true;
   Sysreset();  
   
   
@@ -384,12 +509,17 @@ void setup()
 
 void loop()
 {
+  if (Mode == 0) {
+    readWifi();
+    readCoinButton();
+  }
 
-   readWifi();
-   readCoinButton();
-   readCom();  
+   if (Mode == 1) {
+    readCoinButton();
+    RcInput();
+   }
     
-   
+   readCom(); 
 }
 
 
@@ -458,7 +588,7 @@ void parseCommand(String cmd) {
       }
       
     //Serial1.print("5");     // to Coin Levelstatus
-    Serial2.print("mode1");           // hier geht es weiter zum Marcduino Dome Controller
+    Serial2.print("mode1");           // hier geht es weiter zum Dome Controller
     Serial2.print('\r');
     delay(500);
     
@@ -473,11 +603,13 @@ void parseCommand(String cmd) {
         Serial.println("######Comando CBD2 ######");
         Serial.println(cmd);
       }
+      Mode = 0;
+      
       Serial2.print("mode0");           // hier geht es weiter zum  Dome Controller
       Serial2.print('\r');
       delay(500);
 
-      Serial2.print("$28");           // hier geht es weiter zum  Dome Controller
+      Serial2.print("$216");           // hier geht es weiter zum  Dome Controller
       Serial2.print('\r');
       delay(500);
     }
@@ -487,11 +619,15 @@ void parseCommand(String cmd) {
         Serial.println("######Comando Dome CBD3 ######");
         Serial.println(cmd);
       }
+      Mode = 1;
       Serial2.print("center");           // hier geht es weiter zum Marcduino Dome Controller
       Serial2.print('\r');
       delay(500);
-      Serial3.print("$214");           // hier geht es weiter zum Marcduino Dome Controller
+      Serial3.print("$211");           // hier geht es weiter zum Marcduino Dome Controller
       Serial3.print('\r');
+
+      
+      
       pwm.setPWM(14, 0, pulseWidth(KlappeAuf[4]));//Klappe x  
       delay(500);
        
@@ -509,7 +645,7 @@ void parseCommand(String cmd) {
       Serial3.print(":OP02");           // hier geht es weiter zum Marcduino Dome Controller
       Serial3.print('\r');
       delay(500);
-      Serial3.print("$26");
+      Serial3.print("$12");
       Serial3.print("\r");
     }
 
@@ -544,7 +680,7 @@ void parseCommand(String cmd) {
       Serial3.print(":OP04");
       Serial3.print("\r");
       delay(100);
-      Serial3.print("$26");
+      Serial3.print("$118");
       Serial3.print("\r");
     }
 
@@ -561,7 +697,7 @@ void parseCommand(String cmd) {
       Serial2.print("tool2");
       Serial2.print("\r");
       delay(2000);
-      Serial3.print("$26");
+      Serial3.print("$12");
       Serial3.print("\r");
       delay(500);
       Serial3.print(":OP05");
@@ -581,8 +717,11 @@ void parseCommand(String cmd) {
 
       Serial2.print("tool3");
       Serial2.print("\r");
-      delay(2500);
+      delay(1000);
       Serial3.print(":OP06");
+      Serial3.print("\r");
+      delay(500);
+      Serial3.print("$118");
       Serial3.print("\r");
 
       
@@ -598,15 +737,15 @@ void parseCommand(String cmd) {
       delay(1500);
       pwm.setPWM(0, 0, pulseWidth(160));///Arm 1 hoch
       delay(500);
-      pwm.setPWM(1, 0, pulseWidth(140));///Hand Auf
+      pwm.setPWM(1, 0, pulseWidth(GripZu));///Hand Auf
       delay(500);
-      pwm.setPWM(1, 0, pulseWidth(80));///Hand schließen
+      pwm.setPWM(1, 0, pulseWidth(GripAuf));///Hand schließen
       delay(1500);
-      pwm.setPWM(1, 0, pulseWidth(140));///Hand Auf
+      pwm.setPWM(1, 0, pulseWidth(GripZu));///Hand Auf
       delay(500);
       pwm.setPWM(1, 0, pulseWidth(80));///Hand schließen
       
-      Serial3.print("$26");
+      Serial3.print("$116");
       Serial3.print("\r");
       
     }
@@ -630,7 +769,7 @@ void parseCommand(String cmd) {
       
       
       
-      Serial3.print("$26");
+      Serial3.print("$12");
       Serial3.print("\r");
 
       
@@ -645,7 +784,7 @@ void parseCommand(String cmd) {
       pwm.setPWM(13, 0, pulseWidth(KlappeAuf[3]));//Klappe 1
       delay(1500);
      
-      Serial3.print("$26");
+      Serial3.print("$116");
       Serial3.print("\r");
 
       
@@ -658,7 +797,7 @@ void parseCommand(String cmd) {
        }
 
           
-      Serial3.print("$26");
+      Serial3.print("$118");
       Serial3.print("\r");
 
       pwm.setPWM(7, 0, pulseWidth(SchubaZu[1]));///Schuba S1
@@ -675,7 +814,7 @@ void parseCommand(String cmd) {
        }
 
           
-      Serial3.print("$26");
+      Serial3.print("$12");
       Serial3.print("\r");
 
       pwm.setPWM(5, 0, pulseWidth(SchubaZu[3]));///Schuba S3
@@ -691,7 +830,7 @@ void parseCommand(String cmd) {
          Serial.println(cmd);
        }
           
-      Serial3.print("$26");
+      Serial3.print("$211");
       Serial3.print("\r");
       DrivePower(1);
       
@@ -703,7 +842,7 @@ void parseCommand(String cmd) {
          Serial.println(cmd);
        }
           
-      Serial3.print("$26");
+      Serial3.print("$217");
       Serial3.print("\r");
       DrivePower(0);
       
