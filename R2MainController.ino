@@ -103,9 +103,7 @@ int ServosAus() {
 
  
 
-int Sysreset(){
-       
-      
+int Sysreset(){   
        
        pwm.setPWM(0, 0, pulseWidth(30));///Arm 1 zurück
        delay(200);
@@ -115,7 +113,7 @@ int Sysreset(){
        delay(200);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(200);
-       pwm.setPWM(3, 0, pulseWidth(30));///Schrauber aus
+       pwm.setPWM(3, 0, pulseWidth(80));///Schrauber aus
        delay(200);
        
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {
@@ -124,8 +122,6 @@ int Sysreset(){
          pwm.setPWM(port, 0, pulseWidth(KlappeZu[thisKlappe]));//Klappe x      
          
       }
-
-       
       
       pwm.setPWM(7, 0, pulseWidth(SchubaZu[1]));///Schuba S1
       delay(50);
@@ -134,9 +130,7 @@ int Sysreset(){
       pwm.setPWM(5, 0, pulseWidth(SchubaZu[3]));///Schuba S3
       delay(50);
       pwm.setPWM(4, 0, pulseWidth(SchubaZu[4]));///Schuba S4
-
-      delay(200);
-      
+      delay(800);    
       ServosAus();    
       
 }
@@ -150,7 +144,7 @@ int CloseAll() {
        delay(200);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(200);
-       pwm.setPWM(3, 0, pulseWidth(30));///Schrauber aus
+       pwm.setPWM(3, 0, pulseWidth(80));///Schrauber aus
        delay(200);
        
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {
@@ -169,7 +163,7 @@ int CloseAll() {
       delay(50);
       pwm.setPWM(4, 0, pulseWidth(SchubaZu[4]));///Schuba S1
 
-      delay(200);
+      delay(800);
 
       ServosAus();
 
@@ -192,7 +186,7 @@ int OpenAll() {
       pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
       delay(50);
       pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
-      delay(200);
+      delay(800);
       
       ServosAus();
       
@@ -207,7 +201,7 @@ int Smirk() {
        delay(50);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(50);
-       pwm.setPWM(3, 0, pulseWidth(30));///Schrauber aus
+       pwm.setPWM(3, 0, pulseWidth(80));///Schrauber aus
        delay(50);
        
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {   
@@ -237,7 +231,7 @@ int Smirk() {
       pwm.setPWM(5, 0, pulseWidth(SchubaZu[3]));///Schuba S1
       delay(150);
       pwm.setPWM(4, 0, pulseWidth(SchubaZu[4]));///Schuba S1
-      delay(200);
+      delay(800);
       
       ServosAus();    
  
@@ -252,7 +246,7 @@ int Wave() {
        delay(50);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(50);
-       pwm.setPWM(3, 0, pulseWidth(30));///Schrauber aus
+       pwm.setPWM(3, 0, pulseWidth(80));///Schrauber aus
        delay(50);
        
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {   
@@ -303,7 +297,7 @@ int Dance() {
        delay(50);
        pwm.setPWM(2, 0, pulseWidth(30));///Arm 2 zurück
        delay(50);
-       pwm.setPWM(3, 0, pulseWidth(30));///Schrauber aus
+       pwm.setPWM(3, 0, pulseWidth(80));///Schrauber aus
        delay(50);
        
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {   
@@ -332,16 +326,14 @@ int Faint() {
         delay(1500);
         pwm.setPWM(0, 0, pulseWidth(160));///Arm 1 hoch
         
-           pwm.setPWM(12, 0, pulseWidth(50));//Klappe x   
+           pwm.setPWM(12, 0, pulseWidth(100));//Klappe x   
            pwm.setPWM(13, 0, pulseWidth(120));//Klappe x   
            pwm.setPWM(14, 0, pulseWidth(100));//Klappe x   
            pwm.setPWM(15, 0, pulseWidth(120));//Klappe x   
            
         
-       delay(3000);       
-       pwm.setPWM(0, 0, pulseWidth(30));///Arm 1 zurück
-       delay(3000);    
-
+       delay(2000);       
+       
        Sysreset();     
    
 }
@@ -362,6 +354,34 @@ void DrivePower(int on){
   
 }
 
+void Arm2(){
+   pwm.setPWM(15, 0, pulseWidth(KlappeAuf[5]));//Klappe 1
+   delay(1500);
+   pwm.setPWM(2, 0, pulseWidth(150));///Arm 2 hoch
+   delay(1000);
+   pwm.setPWM(3, 0, pulseWidth(40));///Schrauber an
+   delay(2000);
+   pwm.setPWM(3, 0, pulseWidth(80));///Schrauber aus
+   pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S3
+   Serial3.print("$12");
+   Serial3.print("\r"); 
+}
+
+void Arm1(){
+   pwm.setPWM(11, 0, pulseWidth(70));///Klappe 1 auf
+   delay(1500);
+   pwm.setPWM(0, 0, pulseWidth(160));///Arm 1 hoch
+   delay(500);
+   pwm.setPWM(1, 0, pulseWidth(GripAuf));///Hand Auf
+   delay(500);
+   pwm.setPWM(1, 0, pulseWidth(GripZu));///Hand schließen
+   delay(1500);
+   pwm.setPWM(1, 0, pulseWidth(GripAuf));///Hand Auf
+   delay(500);
+   pwm.setPWM(1, 0, pulseWidth(GripZu));///Hand schließen
+   Serial3.print("$116");
+   Serial3.print("\r");
+}
 
 
 
@@ -380,6 +400,9 @@ void RcInput() {
     int CH11value = pulseIn(CH11,HIGH);
     int CH12value = pulseIn(CH12,HIGH);
     int CH13value = pulseIn(CH13,HIGH);
+    int CH14value = pulseIn(CH14,HIGH);
+    int CH10value = pulseIn(CH10,HIGH);
+    int CH9value = pulseIn(CH9,HIGH);
     
     int CH5value = pulseIn(CH5,HIGH);
     int CH6value = pulseIn(CH6,HIGH);
@@ -460,7 +483,70 @@ void RcInput() {
           } // END CH13   
           
 
+          if (CH14value < 1400){
+              if (debug){ 
+                  Serial.println("LEIA");
+              }
+              
+            Serial3.print(":SE08");           // hier geht es weiter zum Marcduino Dome Controller
+            Serial3.print('\r');
+                          
+    
+          } else if (CH14value > 1500) {
+                if (debug) {
+                    Serial.println("Faint");
+                    }     
+                    
+            Serial3.print(":SE56");           // hier geht es weiter zum Marcduino Dome Controller
+            Serial3.print('\r');
+            Faint();
+               
+          } // END CH14   
 
+          if (CH10value < 1400){
+              if (debug){ 
+                  Serial.println("Arm1");
+              }
+              Arm1();
+          } else if (CH10value > 1500) {
+                if (debug) {
+                    Serial.println("Arm2");
+                    }     
+                    
+          
+               
+          } // END CH10
+          
+           if (CH9value < 1400){
+              if (debug){ 
+                  Serial.println("Tool1");
+              }
+              
+            Serial2.print("tool1");
+            Serial2.print("\r");
+            delay(2000); 
+            Serial3.print(":OP04");
+             Serial3.print("\r");
+            delay(100);
+            Serial3.print("$118");
+             Serial3.print("\r");
+                          
+    
+          } else if (CH9value > 1500) {
+                if (debug) {
+                    Serial.println("Tool2");
+                    }     
+                    
+           Serial2.print("tool2");
+            Serial2.print("\r");
+             delay(2000);
+             Serial3.print("$12");
+             Serial3.print("\r");
+              delay(500);
+            Serial3.print(":OP05");
+            Serial3.print("\r");
+               
+          } // END CH10
 
           
 
@@ -470,14 +556,14 @@ void RcInput() {
                   Serial.println("Move");
               }
               
-              DrivePower(0);
+              DrivePower(1);
     
           } else if (CH5value > 1500) {
                 if (debug) {
                     Serial.println("Drive");
                     }     
                     
-              DrivePower(1); 
+              DrivePower(0); 
                
           } // END CH5
 
@@ -748,11 +834,9 @@ void parseCommand(String cmd) {
 
     if (cmd == "CB3") {
     if (debug){
-          Serial.println("######Comando - tool2######");
+          Serial.println("######Comando - tool3######");
          Serial.println(cmd);
-       }
-      
-         
+       }      
 
       Serial2.print("tool3");
       Serial2.print("\r");
@@ -772,21 +856,7 @@ void parseCommand(String cmd) {
          Serial.println(cmd);
        }
           
-      pwm.setPWM(11, 0, pulseWidth(70));///Klappe 1 auf
-      delay(1500);
-      pwm.setPWM(0, 0, pulseWidth(160));///Arm 1 hoch
-      delay(500);
-      pwm.setPWM(1, 0, pulseWidth(GripZu));///Hand Auf
-      delay(500);
-      pwm.setPWM(1, 0, pulseWidth(GripAuf));///Hand schließen
-      delay(1500);
-      pwm.setPWM(1, 0, pulseWidth(GripZu));///Hand Auf
-      delay(500);
-      pwm.setPWM(1, 0, pulseWidth(GripZu));///Hand schließen
-      
-      Serial3.print("$116");
-      Serial3.print("\r");
-      
+      Arm1();
     }
 
     if (cmd == "CB5") {
@@ -795,23 +865,8 @@ void parseCommand(String cmd) {
          Serial.println(cmd);
        }
 
-      pwm.setPWM(15, 0, pulseWidth(KlappeAuf[5]));//Klappe 1
-      delay(1500);
-      pwm.setPWM(2, 0, pulseWidth(150));///Arm 2 hoch
-      delay(1000);
-      pwm.setPWM(3, 0, pulseWidth(20));///Schrauber hoch
-      delay(500);
-      pwm.setPWM(3, 0, pulseWidth(80));///Schrauber hoch
-
-      pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S3
-
-      
-      
-      
-      Serial3.print("$12");
-      Serial3.print("\r");
-
-      
+      Arm2();
+   
     }
 
      if (cmd == "CB6") {
