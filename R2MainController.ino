@@ -80,7 +80,7 @@ int KlappeZu[] = {0,170,180,190,190,50};
 //SCHUBA 0 1 2 3 4
 int SchubaAuf[] = {0, 80, 80, 80, 80};
 //SCHUBA 0 1 2 3 4
-int SchubaZu[] = {0, 190, 190, 190, 190};
+int SchubaZu[] = {0, 190, 190, 190, 180};
 
 
 int GripAuf = 90;
@@ -88,6 +88,7 @@ int GripZu = 62;
 
 int ServosAus() {
       //Alle Klappenservos aus
+      delay(500);
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {
           int port = thisKlappe +10;
          pwm.setPWM(port, 0, 4096); ///Servo Abschalten
@@ -151,7 +152,7 @@ int CloseAll() {
     
          int port = thisKlappe +10;
          pwm.setPWM(port, 0, pulseWidth(KlappeZu[thisKlappe]));//Klappe 1
-  
+          delay(200);
       }
    
       delay(50);
@@ -172,12 +173,14 @@ int CloseAll() {
 
 
 int OpenAll() {
+
+      
       
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {
     
          int port = thisKlappe +10;
          pwm.setPWM(port, 0, pulseWidth(KlappeAuf[thisKlappe]));//Klappe 1
-          
+          delay(200);
       }
       pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
       delay(50);
@@ -186,8 +189,7 @@ int OpenAll() {
       pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
       delay(50);
       pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
-      delay(800);
-      
+      delay(800);   
       ServosAus();
       
 }
@@ -207,13 +209,13 @@ int Smirk() {
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {   
          int port = thisKlappe +10;        
          pwm.setPWM(port, 0, pulseWidth(KlappeAuf[thisKlappe]));//Klappe x    
-         delay(100);         
+         delay(200);         
       }
       
       for (int thisKlappe = 1; thisKlappe <= 5; thisKlappe++) {   
          int port = thisKlappe +10;       
          pwm.setPWM(port, 0, pulseWidth(KlappeZu[thisKlappe]));//Klappe x    
-         delay(100);          
+         delay(200);          
       }     
        
       pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
@@ -508,13 +510,14 @@ void RcInput() {
                   Serial.println("Arm1");
               }
               Arm1();
-          } else if (CH10value > 1500) {
+          } 
+          
+          if (CH10value > 1600) {
                 if (debug) {
                     Serial.println("Arm2");
+                    Serial.println(CH10value);
                     }     
-                    
-          
-               
+               Arm2();            
           } // END CH10
           
            if (CH9value < 1400){
@@ -625,6 +628,7 @@ void setup()
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY); 
   debug = false;
+  //debug = true;
   Sysreset();  
   
   
@@ -721,6 +725,10 @@ void parseCommand(String cmd) {
     Serial3.print(":SE13");           // hier geht es weiter zum Marcduino Dome Controller
     Serial3.print('\r');
     Sysreset();
+
+    Serial2.print("center");           // hier geht es weiter zum Dome Controller
+    Serial2.print('\r');
+    
       
     }
     if (cmd == "CBD2") {
@@ -734,8 +742,8 @@ void parseCommand(String cmd) {
       Serial2.print('\r');
       delay(500);
 
-      Serial2.print("$216");           // hier geht es weiter zum  Dome Controller
-      Serial2.print('\r');
+      Serial3.print(":SE11");           // hier geht es weiter zum  Marcduino
+      Serial3.print('\r');
       delay(500);
     }
     
@@ -745,17 +753,17 @@ void parseCommand(String cmd) {
         Serial.println(cmd);
       }
       Mode = 1;
-      Serial2.print("center");           // hier geht es weiter zum Marcduino Dome Controller
+      Serial2.print("mode1");           // hier geht es weiter zum Marcduino Dome Controller
       Serial2.print('\r');
       delay(500);
+      Serial3.print(":SE10");           // hier geht es weiter zum Marcduino Dome Controller
+      Serial3.print('\r');
+      delay(100);
       Serial3.print("$211");           // hier geht es weiter zum Marcduino Dome Controller
       Serial3.print('\r');
-
       
-      
-      pwm.setPWM(14, 0, pulseWidth(KlappeAuf[4]));//Klappe x  
       delay(500);
-       
+      Sysreset();     
       
     }
   
@@ -767,7 +775,7 @@ void parseCommand(String cmd) {
       Serial2.print("usb");           // hier geht es weiter zum  Dome Controller
       Serial2.print('\r');
       delay(1000);
-      Serial3.print(":OP02");           // hier geht es weiter zum Marcduino Dome Controller
+      Serial3.print(":OP03");           // hier geht es weiter zum Marcduino Dome Controller
       Serial3.print('\r');
       delay(500);
       Serial3.print("$12");
@@ -838,12 +846,14 @@ void parseCommand(String cmd) {
          Serial.println(cmd);
        }      
 
-      Serial2.print("tool3");
-      Serial2.print("\r");
-      delay(1000);
-      Serial3.print(":OP11");
+      
+      Serial3.print(":OP07");
       Serial3.print("\r");
       delay(500);
+      Serial3.print(":OP08");
+      Serial3.print("\r");
+      delay(500);
+      
       Serial3.print("$118");
       Serial3.print("\r");
 
