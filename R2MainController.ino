@@ -16,10 +16,10 @@ int Mode = 0; // Default Mode  0 = Input Wifi and Coin
 ///Relais Bridge for MOVE/Drive
 ///Set Pins as Output
 
-const int REL1 =  42;  
-const int REL2 =  43;  
-const int REL3 =  44;  
-const int REL4 =  45;  
+//const int REL1 =  42;  
+//const int REL2 =  43;  
+//const int REL3 =  44;  
+//const int REL4 =  45;  
 
 ///Input Channels for RC Controller
 
@@ -340,21 +340,7 @@ int Faint() {
    
 }
 
-void DrivePower(int on){
-  
-   if (on == 1) {
-   digitalWrite(REL1, HIGH);
-   digitalWrite(REL2, HIGH);
-   digitalWrite(REL3, HIGH);
-   digitalWrite(REL4, HIGH);
-   } else  {
-   digitalWrite(REL1, LOW);
-   digitalWrite(REL2, LOW);
-   digitalWrite(REL3, LOW);
-   digitalWrite(REL4, LOW);
-   }
-  
-}
+
 
 void Arm2(){
    pwm.setPWM(15, 0, pulseWidth(KlappeAuf[5]));//Klappe 1
@@ -936,7 +922,7 @@ void parseCommand(String cmd) {
           
       Serial3.print("$211");
       Serial3.print("\r");
-      DrivePower(1);
+     pwm.setPWM(14, 0, pulseWidth(KlappeAuf[4]));//Klappe 4
       
     }
 
@@ -948,7 +934,8 @@ void parseCommand(String cmd) {
           
       Serial3.print("$217");
       Serial3.print("\r");
-      DrivePower(0);
+      pwm.setPWM(12, 0, pulseWidth(KlappeAuf[2]));//Klappe 2
+      
       
     }
 
