@@ -59,9 +59,10 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 // 1 = Servo Hand
 // 2 = Servo Arm Links auf ab
 // 3 = Servo Schrauber an/aus
-// 4 = 
-// 6 =
-// 7 =
+// 4 = Schuba S4
+// 5 = Schuba S3
+// 6 = Schuba S2
+// 7 = Schuba S1
 // 8 =
 // 9 =
 //10 =
@@ -604,17 +605,18 @@ void setup()
   Serial1.begin(9600); // Serial RX Input vom Coinslot Modul TX to Coinslot Modul
   Serial2.begin(9600); // Serial TX ____ to Dome Drive Controller
   Serial3.begin(9600); // Serial RX Input vom Wifi Modul TX to Marcduino Boards
-  ///Output Pin for Relais Move/Drive
-  pinMode(REL1, OUTPUT);
-  pinMode(REL2, OUTPUT);
-  pinMode(REL3, OUTPUT);
-  pinMode(REL4, OUTPUT);
-  DrivePower(1);
   Serial.println("16 channel Servo test!");
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY); 
   debug = false;
   //debug = true;
+  Serial3.print("$+");           // hier geht es weiter zum Marcduino Dome Controller
+  Serial3.print('\r');
+  Serial3.print("$+");           // hier geht es weiter zum Marcduino Dome Controller
+  Serial3.print('\r');
+  Serial3.print("$+");           // hier geht es weiter zum Marcduino Dome Controller
+  Serial3.print('\r');
+  
   Sysreset();  
   
   
