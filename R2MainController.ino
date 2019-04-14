@@ -608,12 +608,15 @@ void setup()
   Serial.println("16 channel Servo test!");
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY); 
+  delay(2000);
   debug = false;
   //debug = true;
   Serial3.print("$+");           // hier geht es weiter zum Marcduino Dome Controller
   Serial3.print('\r');
+  delay(500);
   Serial3.print("$+");           // hier geht es weiter zum Marcduino Dome Controller
   Serial3.print('\r');
+  delay(500);
   Serial3.print("$+");           // hier geht es weiter zum Marcduino Dome Controller
   Serial3.print('\r');
   
