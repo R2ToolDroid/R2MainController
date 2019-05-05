@@ -16,10 +16,10 @@ int Mode = 0; // Default Mode  0 = Input Wifi and Coin
 ///Relais Bridge for MOVE/Drive
 ///Set Pins as Output
 
-const int REL1 =  42;  
-const int REL2 =  43;  
-const int REL3 =  44;  
-const int REL4 =  45;  
+//const int REL1 =  42;  
+//const int REL2 =  43;  
+//const int REL3 =  44;  
+//const int REL4 =  45;  
 
 ///Input Channels for RC Controller
 
@@ -59,10 +59,10 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 // 1 = Servo Hand
 // 2 = Servo Arm Links auf ab
 // 3 = Servo Schrauber an/aus
-// 4 = 
-// 6 =
-// 7 =
-// 8 =
+// 4 = Schuba 1
+// 6 = Schuba 2
+// 7 = Schuba 3
+// 8 = Schuba 4
 // 9 =
 //10 =
 //11 = P-1 Tür links
@@ -340,21 +340,6 @@ int Faint() {
    
 }
 
-void DrivePower(int on){
-  
-   if (on == 1) {
-   digitalWrite(REL1, HIGH);
-   digitalWrite(REL2, HIGH);
-   digitalWrite(REL3, HIGH);
-   digitalWrite(REL4, HIGH);
-   } else  {
-   digitalWrite(REL1, LOW);
-   digitalWrite(REL2, LOW);
-   digitalWrite(REL3, LOW);
-   digitalWrite(REL4, LOW);
-   }
-  
-}
 
 void Arm2(){
    pwm.setPWM(15, 0, pulseWidth(KlappeAuf[5]));//Klappe 1
@@ -559,14 +544,14 @@ void RcInput() {
                   Serial.println("Move");
               }
               
-              DrivePower(1);
+             
     
           } else if (CH5value > 1500) {
                 if (debug) {
                     Serial.println("Drive");
                     }     
                     
-              DrivePower(0); 
+              
                
           } // END CH5
 
@@ -618,12 +603,6 @@ void setup()
   Serial1.begin(9600); // Serial RX Input vom Coinslot Modul TX to Coinslot Modul
   Serial2.begin(9600); // Serial TX ____ to Dome Drive Controller
   Serial3.begin(9600); // Serial RX Input vom Wifi Modul TX to Marcduino Boards
-  ///Output Pin for Relais Move/Drive
-  pinMode(REL1, OUTPUT);
-  pinMode(REL2, OUTPUT);
-  pinMode(REL3, OUTPUT);
-  pinMode(REL4, OUTPUT);
-  DrivePower(1);
   Serial.println("16 channel Servo test!");
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY); 
