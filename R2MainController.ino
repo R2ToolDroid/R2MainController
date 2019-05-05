@@ -13,14 +13,6 @@ int Mode = 0; // Default Mode  0 = Input Wifi and Coin
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-///Relais Bridge for MOVE/Drive
-///Set Pins as Output
-
-//const int REL1 =  42;  
-//const int REL2 =  43;  
-//const int REL3 =  44;  
-//const int REL4 =  45;  
-
 ///Input Channels for RC Controller
 
 ////Taster
