@@ -824,7 +824,7 @@ void parseCommand(String cmd) {
           
       Serial3.print("$211");
       Serial3.print("\r");
-      DrivePower(1);
+      
       
     }
 
@@ -836,7 +836,7 @@ void parseCommand(String cmd) {
           
       Serial3.print("$217");
       Serial3.print("\r");
-      DrivePower(0);
+     
       
     }
 
