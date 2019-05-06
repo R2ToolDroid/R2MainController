@@ -35,7 +35,10 @@ int CH7 = 24;
 
 
 
-Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
+//Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
+
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
 
 #define MIN_PULSE_WIDTH       500
 //650
@@ -78,6 +81,35 @@ int SchubaZu[] = {0, 190, 190, 190, 180};
 int GripAuf = 90;
 int GripZu = 62;
 
+int pulseWidth(int angle)
+{
+  int pulse_wide, analog_value;
+  pulse_wide   = map(angle, 0, 180, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
+  analog_value = int(float(pulse_wide) / 1000000 * FREQUENCY * 4096);
+  //Serial.println(analog_value);
+  return analog_value;
+}
+
+void readWifi() {
+  
+  if(Serial3.available() > 0 )
+    {      
+       data = Serial3.readStringUntil('\r');      
+      if (data != "") {
+        if (debug){
+           // say what you got:
+          Serial.print("I received from Wifi: ");
+          Serial.println(data);
+        }
+          parseCommand(data);
+          data = "";
+          Serial3.flush();
+      } // end data
+    } // end serial
+}
+
+
+
 int ServosAus() {
       //Alle Klappenservos aus
       delay(500);
@@ -91,7 +123,8 @@ int ServosAus() {
       pwm.setPWM(5, 0, 4096); ///Servo Abschalten
       pwm.setPWM(6, 0, 4096); ///Servo Abschalten
       pwm.setPWM(7, 0, 4096); ///Servo Abschalten
-  
+
+      return true;	  
 }
 
  
@@ -126,6 +159,7 @@ int Sysreset(){
       delay(800);    
       ServosAus();    
       
+      return true;
 }
 
 
@@ -362,18 +396,6 @@ void Arm1(){
    Serial3.print("\r");
 }
 
-
-
-int pulseWidth(int angle)
-{
-  int pulse_wide, analog_value;
-  pulse_wide   = map(angle, 0, 180, MIN_PULSE_WIDTH, MAX_PULSE_WIDTH);
-  analog_value = int(float(pulse_wide) / 1000000 * FREQUENCY * 4096);
-  //Serial.println(analog_value);
-  return analog_value;
-}
-
-
 void RcInput() {
 
     int CH11value = pulseIn(CH11,HIGH);
@@ -571,111 +593,6 @@ void RcInput() {
       } //END check RC connected
       
 } //END Sensor RC Input
-
-
-
-void setup()
-{
-  // Zuerst initialisieren wir die serielle Schnittstelle des Arduino.
-  Serial.begin(9600); // Monitor for debugging
-  Serial.println("##### R2MainController 16.12.2018 #####");
-  Serial.println("Comandos von RC - CoinTaster - Wfif Modul werde verarbeitet");
-  Serial.println("INPUT:");
-  Serial.println("..... CoinButton Controller an ....Serial 1 RX");
-  Serial.println("..... .............................Serial 2 RX");
-  Serial.println("..... WiFi Modul an ...............Serial 3 RX");
-  Serial.println("");
-  Serial.println("OUTPUT:");
-  Serial.println("..... CoinButton Controller an ....Serial 1 RX");
-  Serial.println("..... Dome Drive Controller........Serial 2 TX");
-  Serial.println("..... Marcduino Dome Controller....Serial 3 TX");
-  Serial.println("");
-  Serial.println("...fuer DebugMode debug eingeben...");
-  Serial.println("...ende DebugMode debug off eingeben...");
-  Serial1.begin(9600); // Serial RX Input vom Coinslot Modul TX to Coinslot Modul
-  Serial2.begin(9600); // Serial TX ____ to Dome Drive Controller
-  Serial3.begin(9600); // Serial RX Input vom Wifi Modul TX to Marcduino Boards
-  Serial.println("16 channel Servo test!");
-  pwm.begin();
-  pwm.setPWMFreq(FREQUENCY); 
-  debug = false;
-  //debug = true;
-  Sysreset();  
-  
-  
-}
-
-/* ##### MAIN KERNEL SECTION #####*/
-
-void loop()
-{
-  if (Mode == 0) {
-    readWifi();
-    readCoinButton();
-  }
-
-   if (Mode == 1) {
-    readCoinButton();
-    RcInput();
-   }
-    
-   readCom(); 
-}
-
-
-
-void readWifi() {
-  
-  if(Serial3.available() > 0 )
-    {      
-       data = Serial3.readStringUntil('\r');      
-      if (data != "") {
-        if (debug){
-           // say what you got:
-          Serial.print("I received from Wifi: ");
-          Serial.println(data);
-        }
-          parseCommand(data);
-          data = "";
-          Serial3.flush();
-      } // end data
-    } // end serial
-}
-
-
-
-void readCoinButton() {
-    
-    if(Serial1.available() > 0 )
-    {      
-      data = Serial1.readStringUntil('\r');      
-      if (data != "") {
-        if (debug){
-           // say what you got:
-          Serial.print("I received from CoinButton: ");
-          Serial.println(data);
-        }
-          parseCommand(data);
-          data = "";
-         Serial1.flush();
-      } // end data
-    } // end Serial
-  
-}
-
-void readCom() {
- 
-  if(Serial.available() > 0)
-    {
-        data = Serial.readStringUntil('\n');
-        parseCommand(data);
-        data = "";
-        Serial.flush();
-    } // end serial
-     
-}
-
-
 
 
 void parseCommand(String cmd) {
@@ -1046,7 +963,92 @@ void parseCommand(String cmd) {
   
 }
 
-///BODY Action from Dome Command
+
+void setup()
+{
+  // Zuerst initialisieren wir die serielle Schnittstelle des Arduino.
+  Serial.begin(9600); // Monitor for debugging
+  Serial.println("##### R2MainController 16.12.2018 #####");
+  Serial.println("Comandos von RC - CoinTaster - Wfif Modul werde verarbeitet");
+  Serial.println("INPUT:");
+  Serial.println("..... CoinButton Controller an ....Serial 1 RX");
+  Serial.println("..... .............................Serial 2 RX");
+  Serial.println("..... WiFi Modul an ...............Serial 3 RX");
+  Serial.println("");
+  Serial.println("OUTPUT:");
+  Serial.println("..... CoinButton Controller an ....Serial 1 RX");
+  Serial.println("..... Dome Drive Controller........Serial 2 TX");
+  Serial.println("..... Marcduino Dome Controller....Serial 3 TX");
+  Serial.println("");
+  Serial.println("...fuer DebugMode debug eingeben...");
+  Serial.println("...ende DebugMode debug off eingeben...");
+  Serial1.begin(9600); // Serial RX Input vom Coinslot Modul TX to Coinslot Modul
+  Serial2.begin(9600); // Serial TX ____ to Dome Drive Controller
+  Serial3.begin(9600); // Serial RX Input vom Wifi Modul TX to Marcduino Boards
+  Serial.println("16 channel Servo test!");
+  pwm.begin();
+  pwm.setPWMFreq(FREQUENCY); 
+  debug = false;
+  //debug = true;
+  Sysreset();  
+  
+  
+}
+
+/* ##### MAIN KERNEL SECTION #####*/
+
+void loop()
+{
+  if (Mode == 0) {
+    readWifi();
+    readCoinButton();
+  }
+
+   if (Mode == 1) {
+    readCoinButton();
+    RcInput();
+   }
+    
+   readCom(); 
+}
+
+
+
+void readCoinButton() {
+    
+    if(Serial1.available() > 0 )
+    {      
+      data = Serial1.readStringUntil('\r');      
+      if (data != "") {
+        if (debug){
+           // say what you got:
+          Serial.print("I received from CoinButton: ");
+          Serial.println(data);
+        }
+          parseCommand(data);
+          data = "";
+         Serial1.flush();
+      } // end data
+    } // end Serial
+  
+}
+
+void readCom() {
+ 
+  if(Serial.available() > 0)
+    {
+        data = Serial.readStringUntil('\n');
+        parseCommand(data);
+        data = "";
+        Serial.flush();
+    } // end serial
+     
+}
+
+
+
+
+// Body Action from Dome Command
 
 void bodyCommand(String bcmd) {
 
