@@ -1066,8 +1066,11 @@ void readCom() {
     {
         data = Serial.readStringUntil('\n');
         parseCommand(data);
-        data = "";
+	delay(59);
+        Serial.print(data);
+	data = "";
         Serial.flush();
+	
     } // end serial
      
 }
