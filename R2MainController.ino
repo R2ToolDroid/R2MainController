@@ -593,7 +593,52 @@ void RcInput() {
       } //END check RC connected
       
 } //END Sensor RC Input
+// Body Action from Dome Command
 
+void bodyCommand(String bcmd) {
+
+      if (bcmd == ":SE00") {
+        Sysreset();
+      }
+
+      if (bcmd == ":CL00") {
+        CloseAll();
+      }
+
+      if (bcmd == ":OP00") {
+        OpenAll();
+      }
+
+      if (bcmd == ":SE04") {
+        Wave();
+      }
+      if (bcmd == ":SE02") {
+        Smirk();
+      }
+      
+      if (bcmd == ":SE03") {
+        Smirk();
+      }
+     
+      if (bcmd == ":SE07") {
+        Dance();
+      }
+
+      if (bcmd == ":SE01") {
+        Faint();
+      }
+      if (bcmd == ":SE06") {
+        Faint();
+      }
+      
+      if (bcmd == ":SE57") {
+        Dance();
+      }
+      
+      
+
+  
+}
 
 void parseCommand(String cmd) {
 
@@ -1032,52 +1077,7 @@ void readCom() {
 
 
 
-// Body Action from Dome Command
 
-void bodyCommand(String bcmd) {
-
-      if (bcmd == ":SE00") {
-        Sysreset();
-      }
-
-      if (bcmd == ":CL00") {
-        CloseAll();
-      }
-
-      if (bcmd == ":OP00") {
-        OpenAll();
-      }
-
-      if (bcmd == ":SE04") {
-        Wave();
-      }
-      if (bcmd == ":SE02") {
-        Smirk();
-      }
-      
-      if (bcmd == ":SE03") {
-        Smirk();
-      }
-     
-      if (bcmd == ":SE07") {
-        Dance();
-      }
-
-      if (bcmd == ":SE01") {
-        Faint();
-      }
-      if (bcmd == ":SE06") {
-        Faint();
-      }
-      
-      if (bcmd == ":SE57") {
-        Dance();
-      }
-      
-      
-
-  
-}
 
 
 /* ##### MAIN KERNEL SECTION #####*/
