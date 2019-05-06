@@ -90,25 +90,6 @@ int pulseWidth(int angle)
   return analog_value;
 }
 
-void readWifi() {
-  
-  if(Serial3.available() > 0 )
-    {      
-       data = Serial3.readStringUntil('\r');      
-      if (data != "") {
-        if (debug){
-           // say what you got:
-          Serial.print("I received from Wifi: ");
-          Serial.println(data);
-        }
-          parseCommand(data);
-          data = "";
-          Serial3.flush();
-      } // end data
-    } // end serial
-}
-
-
 
 int ServosAus() {
       //Alle Klappenservos aus
@@ -1040,6 +1021,23 @@ void setup()
   
 }
 
+void readWifi() {
+  
+  if(Serial3.available() > 0 )
+    {      
+       data = Serial3.readStringUntil('\r');      
+      if (data != "") {
+        if (debug){
+           // say what you got:
+          Serial.print("I received from Wifi: ");
+          Serial.println(data);
+        }
+          parseCommand(data);
+          data = "";
+          Serial3.flush();
+      } // end data
+    } // end serial
+}
 
 
 
@@ -1073,9 +1071,6 @@ void readCom() {
     } // end serial
      
 }
-
-
-
 
 
 
