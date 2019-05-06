@@ -995,22 +995,6 @@ void setup()
   
 }
 
-/* ##### MAIN KERNEL SECTION #####*/
-
-void loop()
-{
-  if (Mode == 0) {
-    readWifi();
-    readCoinButton();
-  }
-
-   if (Mode == 1) {
-    readCoinButton();
-    RcInput();
-   }
-    
-   readCom(); 
-}
 
 
 
@@ -1096,5 +1080,21 @@ void bodyCommand(String bcmd) {
 }
 
 
+/* ##### MAIN KERNEL SECTION #####*/
+
+void loop()
+{
+  if (Mode == 0) {
+    readWifi();
+    readCoinButton();
+  }
+
+   if (Mode == 1) {
+    readCoinButton();
+    RcInput();
+   }
+    
+   readCom(); 
+}
 
 
