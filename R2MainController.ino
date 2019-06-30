@@ -13,6 +13,7 @@ int Mode = 0; // Default Mode  0 = Input Wifi and Coin
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
+
 ///Input Channels for RC Controller
 
 ////Taster
@@ -32,6 +33,15 @@ int CH10 = 7;
 int CH4 = 22; ///ARM Panel 1
 int CH8 = 23;
 int CH7 = 24;
+
+// Triggerrange RC input
+// Top RC Impulse 800 - 1000
+// Bottom RC Impule 1900-2000
+
+int rctopA = 800;
+int rctopB = 1000;
+int rcbotA = 1900;
+int rcbotB = 2200;
 
 
 
@@ -65,18 +75,18 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver(0x40);
 
 //Klappen Servos und Position
 //Nummer  0   1  2  3  4  5
-int KlappeAuf[] = {0,60,20,90,20,170}; //vorher 60 P4
+int KlappeAuf[] = {0,50,20,90,20,170}; //vorher 60 P4
 //Nummer  0   1  2   3   4  5
-int KlappeZu[] = {0,170,180,190,190,50};
+int KlappeZu[] = {0,180,160,170,160,50};
 
 //SCHUBA 0 1 2 3 4
-int SchubaAuf[] = {0, 80, 80, 80, 80};
+int SchubaAuf[] = {0, 60, 60, 60, 60};
 //SCHUBA 0 1 2 3 4
-int SchubaZu[] = {0, 190, 190, 190, 180};
+int SchubaZu[] = {0, 160, 160, 165, 160};
 
 
 int GripAuf = 90;
-int GripZu = 62;
+int GripZu = 55;
 
 int ServosAus() {
       //Alle Klappenservos aus
@@ -174,14 +184,14 @@ int OpenAll() {
          pwm.setPWM(port, 0, pulseWidth(KlappeAuf[thisKlappe]));//Klappe 1
           delay(200);
       }
-      pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
-      delay(50);
-      pwm.setPWM(6, 0, pulseWidth(SchubaAuf[2]));///Schuba S1
-      delay(50);
-      pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
-      delay(50);
-      pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
-      delay(800);   
+      //pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
+      //delay(50);
+      //pwm.setPWM(6, 0, pulseWidth(SchubaAuf[2]));///Schuba S1
+      //delay(50);
+      //pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
+      //delay(50);
+     // pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
+      //delay(800);   
       ServosAus();
       
 }
@@ -210,22 +220,22 @@ int Smirk() {
          delay(200);          
       }     
        
-      pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
-      delay(150);
-      pwm.setPWM(6, 0, pulseWidth(SchubaAuf[2]));///Schuba S1
-      delay(150);
-      pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
-      delay(150);
-      pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
-      delay(150);
-      pwm.setPWM(7, 0, pulseWidth(SchubaZu[1]));///Schuba S1
-      delay(150);
-      pwm.setPWM(6, 0, pulseWidth(SchubaZu[2]));///Schuba S1
-      delay(150);
-      pwm.setPWM(5, 0, pulseWidth(SchubaZu[3]));///Schuba S1
-      delay(150);
-      pwm.setPWM(4, 0, pulseWidth(SchubaZu[4]));///Schuba S1
-      delay(800);
+      //pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
+      //delay(150);
+      //pwm.setPWM(6, 0, pulseWidth(SchubaAuf[2]));///Schuba S1
+      //delay(150);
+      //pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
+      //delay(150);
+      //pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
+      //delay(150);
+      //pwm.setPWM(7, 0, pulseWidth(SchubaZu[1]));///Schuba S1
+      //delay(150);
+      //pwm.setPWM(6, 0, pulseWidth(SchubaZu[2]));///Schuba S1
+      //delay(150);
+      //pwm.setPWM(5, 0, pulseWidth(SchubaZu[3]));///Schuba S1
+      //delay(150);
+      //pwm.setPWM(4, 0, pulseWidth(SchubaZu[4]));///Schuba S1
+      //delay(800);
       
       ServosAus();    
  
@@ -257,22 +267,22 @@ int Wave() {
          delay(500);          
       }     
        
-      pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
-      delay(200);
-      pwm.setPWM(6, 0, pulseWidth(SchubaAuf[2]));///Schuba S1
-      delay(200);
-      pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
-      delay(200);
-      pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
-      delay(200);
-      pwm.setPWM(7, 0, pulseWidth(SchubaZu[1]));///Schuba S1
-      delay(200);
-      pwm.setPWM(6, 0, pulseWidth(SchubaZu[2]));///Schuba S1
-      delay(200);
-      pwm.setPWM(5, 0, pulseWidth(SchubaZu[3]));///Schuba S1
-      delay(200);
-      pwm.setPWM(4, 0, pulseWidth(SchubaZu[4]));///Schuba S1
-      delay(200);
+      //pwm.setPWM(7, 0, pulseWidth(SchubaAuf[1]));///Schuba S1
+      //delay(200);
+      //pwm.setPWM(6, 0, pulseWidth(SchubaAuf[2]));///Schuba S1
+      //delay(200);
+      //pwm.setPWM(5, 0, pulseWidth(SchubaAuf[3]));///Schuba S1
+     // delay(200);
+      //pwm.setPWM(4, 0, pulseWidth(SchubaAuf[4]));///Schuba S1
+      //delay(200);
+      //pwm.setPWM(7, 0, pulseWidth(SchubaZu[1]));///Schuba S1
+     // delay(200);
+      //pwm.setPWM(6, 0, pulseWidth(SchubaZu[2]));///Schuba S1
+     // delay(200);
+      //pwm.setPWM(5, 0, pulseWidth(SchubaZu[3]));///Schuba S1
+      //delay(200);
+      //pwm.setPWM(4, 0, pulseWidth(SchubaZu[4]));///Schuba S1
+     // delay(200);
       
       ServosAus();    
  
@@ -332,6 +342,20 @@ int Faint() {
    
 }
 
+void MaxVol(){
+
+  Serial3.print('$m');           // hier geht es weiter zum Marcduino Dome Controller
+          Serial3.print('\r');
+          delay(100); 
+
+  for (int i = 1; i <= 2; i++) {   
+                
+         Serial3.print("$+");           // hier geht es weiter zum Marcduino Dome Controller
+          Serial3.print('\r');
+          delay(100);        
+      }     
+  
+}
 
 void Arm2(){
    pwm.setPWM(15, 0, pulseWidth(KlappeAuf[5]));//Klappe 1
@@ -347,7 +371,7 @@ void Arm2(){
 }
 
 void Arm1(){
-   pwm.setPWM(11, 0, pulseWidth(70));///Klappe 1 auf
+   pwm.setPWM(11, 0, pulseWidth(KlappeAuf[1]));///Klappe 1 auf
    delay(1500);
    pwm.setPWM(0, 0, pulseWidth(160));///Arm 1 hoch
    delay(500);
@@ -382,15 +406,54 @@ void RcInput() {
     int CH14value = pulseIn(CH14,HIGH);
     int CH10value = pulseIn(CH10,HIGH);
     int CH9value = pulseIn(CH9,HIGH);
-    
     int CH5value = pulseIn(CH5,HIGH);
     int CH6value = pulseIn(CH6,HIGH);
+
+    if (debug){ 
+                  
+                  Serial.print("CH11value ");
+                  Serial.println(CH11value);
+
+                  Serial.print("CH12value ");
+                  Serial.println(CH12value);
+                  Serial.print("CH13value ");
+                  Serial.println(CH13value);
+                  Serial.print("CH14value ");
+                  Serial.println(CH14value);
+                  Serial.print("CH10value ");
+                  Serial.println(CH10value);
+                  Serial.print("CH9value ");
+                  Serial.println(CH9value);
+                  Serial.print("CH5value ");
+                  Serial.println(CH5value);
+                  Serial.print("CH6value ");
+                  Serial.println(CH6value);
+                  
+
+
+                  
+              }
+    
+    
+
+    if (CH11value <= 400) {return;}
+    if (CH12value <= 400) {return;}
+    if (CH13value <= 400) {return;}
+    if (CH14value <= 400) {return;}
+    if (CH10value <= 400) {return;}
+    if (CH9value <= 400) {return;}
+    if (CH5value <= 400) {return;}
+    if (CH6value <= 400) {return;}
+    
    
-      if (CH11value >=800){ ///Check if Sensor is Connected and RC on
+      if (CH11value >= 800){ ///Check if Sensor is Connected and RC on
       ////Sensor Channel auslesen und Action    
-          if (CH11value < 1400){
+      
+          if ((CH11value > rctopA)&&( CH11value < rctopB)){
               if (debug){ 
                   Serial.println("Reset");
+                  Serial.print("CH11value ");
+                  Serial.print(CH11value);
               }
 
             Serial2.print("mode1");           // hier geht es weiter zum Dome Controller
@@ -400,9 +463,11 @@ void RcInput() {
             Serial3.print('\r');
             Sysreset();
     
-          } else if (CH11value > 1500) {
+          } else if ((CH11value > rcbotA)&&( CH11value < rcbotB)) {
                 if (debug) {
                     Serial.println("Wake Up RND");
+                    Serial.print("CH11value ");
+                    Serial.print(CH11value);
                     }     
             Serial2.print("mode0");           // hier geht es weiter zum Dome Controller
             Serial2.print('\r');
@@ -415,9 +480,10 @@ void RcInput() {
           
 
        
-          if (CH12value < 1400){
+          if ((CH12value > rctopA)&&( CH12value < rctopB)){
               if (debug){ 
                   Serial.println("Wave");
+                  
               }
               
             Serial3.print(":SE02");           // hier geht es weiter zum Marcduino Dome Controller
@@ -425,7 +491,7 @@ void RcInput() {
             Wave();
               
     
-          } else if (CH12value > 1500) {
+          } else if ((CH12value > rcbotA)&&( CH12value < rcbotB)) {
                 if (debug) {
                     Serial.println("Smirk");
                     }     
@@ -436,21 +502,22 @@ void RcInput() {
                
           } // END CH12   
 
-          if (CH13value < 1400){
+          if ((CH13value > rctopA)&&( CH13value < rctopB)){
               if (debug){ 
                   Serial.println("Manama");
               }
-              
-            Serial3.print(":SE57");           // hier geht es weiter zum Marcduino Dome Controller
-            Serial3.print('\r');
-            delay(500);
             Serial3.print("$84");           // hier geht es weiter zum Marcduino Dome Controller
             Serial3.print('\r');
+            delay(500);  
+            Serial3.print(":SE57");           // hier geht es weiter zum Marcduino Dome Controller
+            Serial3.print('\r');
             
-            Dance();
+          delay(500);
+            
+           Dance();
               
     
-          } else if (CH13value > 1500) {
+          } else if ((CH13value > rcbotA)&&( CH13value < rcbotB)) {
                 if (debug) {
                     Serial.println("Open ALl");
                     }     
@@ -462,34 +529,38 @@ void RcInput() {
           } // END CH13   
           
 
-          if (CH14value < 1400){
+          if ((CH14value > rctopA)&&( CH14value < rctopB)){
               if (debug){ 
                   Serial.println("LEIA");
+                  Serial.print("CH14value ");
+                  Serial.print(CH14value);
               }
               
             Serial3.print(":SE08");           // hier geht es weiter zum Marcduino Dome Controller
             Serial3.print('\r');
                           
     
-          } else if (CH14value > 1500) {
+          } else if ((CH14value > rcbotA)&&( CH14value < rcbotB)) {
                 if (debug) {
                     Serial.println("Faint");
                     }     
                     
-            Serial3.print(":SE56");           // hier geht es weiter zum Marcduino Dome Controller
+            Serial3.print(":SE06");           // hier geht es weiter zum Marcduino Dome Controller
             Serial3.print('\r');
             Faint();
                
           } // END CH14   
 
-          if (CH10value < 1400){
+          if ((CH10value > rctopA)&&( CH10value < rctopB)){
               if (debug){ 
                   Serial.println("Arm1");
+                  Serial.print("CH10value ");
+                  Serial.print(CH10value);
               }
               Arm1();
           } 
           
-          if (CH10value > 1600) {
+          if ((CH10value > rcbotA)&&( CH10value < rcbotB)) {
                 if (debug) {
                     Serial.println("Arm2");
                     Serial.println(CH10value);
@@ -497,9 +568,11 @@ void RcInput() {
                Arm2();            
           } // END CH10
           
-           if (CH9value < 1400){
+           if ((CH9value > rctopA)&&( CH9value < rctopB)){
               if (debug){ 
                   Serial.println("Tool1");
+                  Serial.print("CH9value ");
+                  Serial.print(CH9value);
               }
               
             Serial2.print("tool1");
@@ -512,7 +585,7 @@ void RcInput() {
              Serial3.print("\r");
                           
     
-          } else if (CH9value > 1500) {
+          } else if ((CH9value > rcbotA)&&( CH9value < rcbotB)) {
                 if (debug) {
                     Serial.println("Tool2");
                     }     
@@ -531,25 +604,44 @@ void RcInput() {
           
 
           ////CH5          
-          if (CH5value < 1400){
+          if ((CH5value > rctopA)&&( CH5value < rctopB)){
               if (debug){ 
                   Serial.println("Move");
+                  Serial.print("CH5value ");
+                  Serial.print(CH5value);
               }
+
+              Serial3.print("*ON01");
+              Serial3.print("\r");
+              delay(100);
+              Serial3.print("*RD01");
+              Serial3.print("\r");
+              delay(500);
+              Serial2.print("mode0");           // hier geht es weiter zum Marcduino Dome Controller
+              Serial2.print('\r');
               
-             
-    
-          } else if (CH5value > 1500) {
+              
+              
+               
+          } else if ((CH5value > rcbotA)&&( CH5value < rcbotB)) {
                 if (debug) {
                     Serial.println("Drive");
+                    Serial.print("CH5value ");
+                    Serial.print(CH5value);
                     }     
-                    
-              
+            Serial3.print("$83");           // hier geht es weiter zum Marcduino Dome Controller
+            Serial3.print('\r');
+            delay(500);  
+            Serial3.print(":SE55");           // hier geht es weiter zum Marcduino Dome Controller
+            Serial3.print('\r');
+            delay(500);
+             
                
           } // END CH5
 
           //CH6
           
-          if (CH6value < 1400){
+          if ((CH6value > rctopA)&&( CH6value < rctopB)){
               if (debug){ 
                   Serial.println("Top Tool");
               }
@@ -557,7 +649,7 @@ void RcInput() {
               Serial3.print(":OP11");
               Serial3.print("\r");
     
-          } else if (CH6value > 1500) {
+          } else if ((CH6value > rcbotA)&&( CH6value < rcbotB)) {
                 if (debug) {
                     Serial.println("Charge");
                     }     
@@ -578,7 +670,7 @@ void setup()
 {
   // Zuerst initialisieren wir die serielle Schnittstelle des Arduino.
   Serial.begin(9600); // Monitor for debugging
-  Serial.println("##### R2MainController 16.12.2018 #####");
+  Serial.println("##### R2MainController 01.05.2019 #####");
   Serial.println("Comandos von RC - CoinTaster - Wfif Modul werde verarbeitet");
   Serial.println("INPUT:");
   Serial.println("..... CoinButton Controller an ....Serial 1 RX");
@@ -595,14 +687,24 @@ void setup()
   Serial1.begin(9600); // Serial RX Input vom Coinslot Modul TX to Coinslot Modul
   Serial2.begin(9600); // Serial TX ____ to Dome Drive Controller
   Serial3.begin(9600); // Serial RX Input vom Wifi Modul TX to Marcduino Boards
+  ///Output Pin for Relais Move/Drive
+  //pinMode(REL1, OUTPUT);
+  //pinMode(REL2, OUTPUT);
+  //pinMode(REL3, OUTPUT);
+  //pinMode(REL4, OUTPUT);
+  //DrivePower(1);
   Serial.println("16 channel Servo test!");
   pwm.begin();
   pwm.setPWMFreq(FREQUENCY); 
   debug = false;
+  
+  
+
+  
+  
   //debug = true;
   Sysreset();  
-  
-  
+  MaxVol();
 }
 
 /* ##### MAIN KERNEL SECTION #####*/
@@ -907,8 +1009,11 @@ void parseCommand(String cmd) {
           
       Serial3.print("$211");
       Serial3.print("\r");
-      DrivePower(1);
-      
+
+      pwm.setPWM(12, 0, pulseWidth(KlappeAuf[2]));//Klappe 1
+      delay(500);
+     
+            
     }
 
     if (cmd == "CB10") {
@@ -916,10 +1021,12 @@ void parseCommand(String cmd) {
           Serial.println("######Comando - CB10 Move####");
          Serial.println(cmd);
        }
-          
+
+      pwm.setPWM(14, 0, pulseWidth(KlappeAuf[4]));//Klappe 1
+      delay(500);    
       Serial3.print("$217");
       Serial3.print("\r");
-      DrivePower(0);
+      
       
     }
 
@@ -981,8 +1088,10 @@ void parseCommand(String cmd) {
          Serial.println(cmd);
        }
           
-      Serial3.print(":CL00");
+      Serial3.print(":SE13");
       Serial3.print("\r");
+      Serial2.print("mode3");
+      Serial2.print("\r");
 
       CloseAll();
       
@@ -1092,7 +1201,3 @@ void bodyCommand(String bcmd) {
 
   
 }
-
-
-
-
